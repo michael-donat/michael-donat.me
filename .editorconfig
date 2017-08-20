@@ -26,7 +26,7 @@ indent_size = tab
 tab_width = 2
 trim_trailing_whitespace = true
 
-[*.{js,jsx}]
+[*.{js,jsx,css}]
 charset = utf-8
 indent_style = tab
 indent_size = tab
