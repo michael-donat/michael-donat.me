@@ -1,0 +1,21 @@
+---
+- hosts: all
+  user: ubuntu
+  tasks:
+  - pip:
+      name: [docker-py, docker]
+      state: absent
+    become: true
+  - pip:
+      name: [docker, docker-compose]
+    become: true
+  - copy: src=secrets dest=/home/ubuntu
+  - copy: src=docker-compose.yml dest=/home/ubuntu/
+  - docker_service:
+      project_src: /home/ubuntu
+      project_name: ubuntu
+      state: present
+      restarted: yes
+      pull: yes
+    become: true
+

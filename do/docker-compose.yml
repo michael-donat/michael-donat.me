@@ -20,5 +20,35 @@ services:
       - "traefik.frontend.rule=Host:michael-donat.me"
       - "traefik.frontend.entryPoints=http,https"
 
+  recipes:
+    image: wordpress:php7.2-apache
+    env_file: [./secrets/wp.env]
+    environment:
+      - WORDPRESS_DB_NAME=blog_przepisy
+    ports:
+      - "81:8080"
+      - "82:80"
+    links:
+      - "recipes_db:mysql"
+    labels:
+      - "traefik.backend=recipes"
+      - "traefik.frontend.rule=Host:przepisy.thedonats.net"
+      - "traefik.frontend.entryPoints=http,https"
+    volumes:
+      - "recipes_data:/var/www/html/wp-content"
+
+  recipes_db:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - recipes_db:/var/lib/mysql
+    env_file: [./secrets/wp.env]
+    labels:
+      - "traefik.enable=false"
+
 volumes:
   acme:
+  recipes_db:
+  recipes_data:
